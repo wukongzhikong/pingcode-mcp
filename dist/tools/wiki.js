@@ -25,6 +25,19 @@ export async function getWikiPage(params) {
     const formatType = params.format_type ?? 'markdown';
     return pingCodeClient.get(`/v1/wiki/pages/${params.page_id}/content?format_type=${formatType}`);
 }
+export async function createWikiPage(params) {
+    const body = {
+        space_id: params.space_id,
+        name: params.name,
+    };
+    if (params.parent_id)
+        body.parent_id = params.parent_id;
+    if (params.content) {
+        body.content = params.content;
+        body.format_type = params.format_type ?? 'markdown';
+    }
+    return pingCodeClient.post('/v1/wiki/pages', body);
+}
 export async function addWikiMembers(params) {
     const results = [];
     for (const uid of params.user_ids) {

@@ -12,7 +12,7 @@ import { listSprints, getSprint } from './tools/sprint.js';
 import { createWorkload, listWorkloads, listWorkloadTypes, } from './tools/workload.js';
 import { createComment, listComments, } from './tools/comment.js';
 import { listReleases, getRelease, } from './tools/release.js';
-import { listWikiSpaces, listWikiPages, getWikiPage, addWikiMembers, } from './tools/wiki.js';
+import { listWikiSpaces, listWikiPages, getWikiPage, createWikiPage, addWikiMembers, } from './tools/wiki.js';
 import { listAttachments, getAttachment, } from './tools/attachment.js';
 import { generateWeeklyReport } from './tools/report.js';
 import { createFromPrd } from './tools/prd.js';
@@ -407,6 +407,21 @@ const TOOLS = [
                 format_type: { type: 'string', description: '输出格式：markdown 或 html', default: 'markdown' },
             },
             required: ['page_id'],
+        },
+    },
+    {
+        name: 'pingcode__create_wiki_page',
+        description: '在知识空间(Wiki)中创建一个页面，支持指定父页面和正文内容（Markdown 等格式）',
+        inputSchema: {
+            type: 'object',
+            properties: {
+                space_id: { type: 'string', description: '知识空间ID' },
+                name: { type: 'string', description: '页面名称' },
+                parent_id: { type: 'string', description: '父页面ID，不填则创建为空间顶层页面' },
+                content: { type: 'string', description: '页面正文内容，与 format_type 同时传递' },
+                format_type: { type: 'string', description: '正文格式：text、markdown 或 html，默认 markdown', enum: ['text', 'markdown', 'html'], default: 'markdown' },
+            },
+            required: ['space_id', 'name'],
         },
     },
     {
@@ -1162,6 +1177,23 @@ async function handleToolCall(request) {
             case 'pingcode__get_wiki_page': {
                 const data = await getWikiPage({
                     page_id: String(args?.page_id),
+                    format_type: args?.format_type || 'markdown',
+                });
+                return {
+                    content: [
+                        {
+                            type: 'text',
+                            text: JSON.stringify(data, null, 2),
+                        },
+                    ],
+                };
+            }
+            case 'pingcode__create_wiki_page': {
+                const data = await createWikiPage({
+                    space_id: String(args?.space_id),
+                    name: String(args?.name),
+                    parent_id: args?.parent_id,
+                    content: args?.content,
                     format_type: args?.format_type || 'markdown',
                 });
                 return {

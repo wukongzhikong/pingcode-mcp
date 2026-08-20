@@ -17,6 +17,14 @@ export interface ListWikiPagesParams {
   page_size?: number;
 }
 
+export interface CreateWikiPageParams {
+  space_id: string;
+  name: string;
+  parent_id?: string;
+  content?: string;
+  format_type?: 'text' | 'markdown' | 'html';
+}
+
 export interface GetWikiPageParams {
   page_id: string;
   format_type?: 'markdown' | 'html';
@@ -52,6 +60,19 @@ export async function listWikiPages(params: ListWikiPagesParams) {
 export async function getWikiPage(params: GetWikiPageParams) {
   const formatType = params.format_type ?? 'markdown';
   return pingCodeClient.get(`/v1/wiki/pages/${params.page_id}/content?format_type=${formatType}`);
+}
+
+export async function createWikiPage(params: CreateWikiPageParams) {
+  const body: Record<string, string> = {
+    space_id: params.space_id,
+    name: params.name,
+  };
+  if (params.parent_id) body.parent_id = params.parent_id;
+  if (params.content) {
+    body.content = params.content;
+    body.format_type = params.format_type ?? 'markdown';
+  }
+  return pingCodeClient.post('/v1/wiki/pages', body);
 }
 
 export interface AddWikiMembersParams {

@@ -12,6 +12,13 @@ export interface ListWikiPagesParams {
     page_index?: number;
     page_size?: number;
 }
+export interface CreateWikiPageParams {
+    space_id: string;
+    name: string;
+    parent_id?: string;
+    content?: string;
+    format_type?: 'text' | 'markdown' | 'html';
+}
 export interface GetWikiPageParams {
     page_id: string;
     format_type?: 'markdown' | 'html';
@@ -20,6 +27,7 @@ export declare function createWikiSpace(params: CreateWikiSpaceParams): Promise<
 export declare function listWikiSpaces(params?: ListWikiSpacesParams): Promise<unknown>;
 export declare function listWikiPages(params: ListWikiPagesParams): Promise<unknown>;
 export declare function getWikiPage(params: GetWikiPageParams): Promise<unknown>;
+export declare function createWikiPage(params: CreateWikiPageParams): Promise<unknown>;
 export interface AddWikiMembersParams {
     space_id: string;
     user_ids: string[];

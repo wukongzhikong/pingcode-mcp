@@ -318,6 +318,7 @@ pingcode-mcp status
 | `pingcode__list_wiki_spaces` | 获取所有 Wiki 空间列表 | 无 |
 | `pingcode__list_wiki_pages` | 获取指定空间下的页面列表 | `space_id` |
 | `pingcode__get_wiki_page` | 获取 Wiki 页面 Markdown 正文 | `page_id` |
+| `pingcode__create_wiki_page` | 在知识空间中创建页面，支持父页面与正文（text/markdown/html） | `space_id`, `name` |
 
 ### 附件管理
 
@@ -445,6 +446,9 @@ AI: [调用 pingcode__list_wiki_pages, space_id="636083f4d18d1aeb7b76b236"]
 
 用户: 读取 Wiki 页面"使用场景"的内容
 AI: [调用 pingcode__get_wiki_page, page_id="636083f4d18d1aeb7b76b239"]
+
+用户: 在"示例空间"下创建一个新页面"会议纪要"，内容用 Markdown 记录本次会议要点
+AI: [调用 pingcode__create_wiki_page, space_id="636083f4d18d1aeb7b76b236", name="会议纪要", content="## 会议要点\n...", format_type="markdown"]
 ```
 
 ### 工作报告
