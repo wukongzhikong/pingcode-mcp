@@ -38,6 +38,23 @@ export async function createWikiPage(params) {
     }
     return pingCodeClient.post('/v1/wiki/pages', body);
 }
+export async function updateWikiPage(params) {
+    const body = {};
+    if (params.name)
+        body.name = params.name;
+    if (params.parent_id)
+        body.parent_id = params.parent_id;
+    return pingCodeClient.patch(`/v1/wiki/pages/${params.page_id}`, body);
+}
+export async function updateWikiPageContent(params) {
+    return pingCodeClient.put(`/v1/wiki/pages/${params.page_id}/content`, {
+        content: params.content,
+        format_type: params.format_type ?? 'markdown',
+    });
+}
+export async function deleteWikiPage(params) {
+    return pingCodeClient.delete(`/v1/wiki/pages/${params.page_id}`);
+}
 export async function addWikiMembers(params) {
     const results = [];
     for (const uid of params.user_ids) {

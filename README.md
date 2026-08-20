@@ -319,6 +319,9 @@ pingcode-mcp status
 | `pingcode__list_wiki_pages` | 获取指定空间下的页面列表 | `space_id` |
 | `pingcode__get_wiki_page` | 获取 Wiki 页面 Markdown 正文 | `page_id` |
 | `pingcode__create_wiki_page` | 在知识空间中创建页面，支持父页面与正文（text/markdown/html） | `space_id`, `name` |
+| `pingcode__update_wiki_page` | 部分更新页面属性（名称、父页面） | `page_id` |
+| `pingcode__update_wiki_page_content` | 更新页面正文（text/markdown/html），更新即发布新版本 | `page_id`, `content` |
+| `pingcode__delete_wiki_page` | 删除 Wiki 页面 | `page_id` |
 
 ### 附件管理
 
@@ -449,6 +452,13 @@ AI: [调用 pingcode__get_wiki_page, page_id="636083f4d18d1aeb7b76b239"]
 
 用户: 在"示例空间"下创建一个新页面"会议纪要"，内容用 Markdown 记录本次会议要点
 AI: [调用 pingcode__create_wiki_page, space_id="636083f4d18d1aeb7b76b236", name="会议纪要", content="## 会议要点\n...", format_type="markdown"]
+
+用户: 把页面"会议纪要"改名为"周会纪要"，并更新正文
+AI: [调用 pingcode__update_wiki_page, page_id="636083f4d18d1aeb7b76b23a", name="周会纪要"]
+AI: [调用 pingcode__update_wiki_page_content, page_id="636083f4d18d1aeb7b76b23a", content="## 周会纪要\n...", format_type="markdown"]
+
+用户: 删除页面"周会纪要"
+AI: [调用 pingcode__delete_wiki_page, page_id="636083f4d18d1aeb7b76b23a"]
 ```
 
 ### 工作报告

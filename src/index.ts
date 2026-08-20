@@ -46,6 +46,9 @@ import {
   listWikiPages,
   getWikiPage,
   createWikiPage,
+  updateWikiPage,
+  updateWikiPageContent,
+  deleteWikiPage,
   addWikiMembers,
 } from './tools/wiki.js';
 import {
@@ -468,6 +471,43 @@ const TOOLS: Tool[] = [
         format_type: { type: 'string', description: '正文格式：text、markdown 或 html，默认 markdown', enum: ['text', 'markdown', 'html'], default: 'markdown' },
       },
       required: ['space_id', 'name'],
+    },
+  },
+  {
+    name: 'pingcode__update_wiki_page',
+    description: '部分更新 Wiki 页面属性（名称、父页面）',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        page_id: { type: 'string', description: '页面ID' },
+        name: { type: 'string', description: '新的页面名称' },
+        parent_id: { type: 'string', description: '新的父页面ID，用于移动页面到其他父页面下' },
+      },
+      required: ['page_id'],
+    },
+  },
+  {
+    name: 'pingcode__update_wiki_page_content',
+    description: '更新 Wiki 页面正文内容（text/markdown/html），更新即发布新版本',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        page_id: { type: 'string', description: '页面ID' },
+        content: { type: 'string', description: '新的页面正文内容' },
+        format_type: { type: 'string', description: '正文格式：text、markdown 或 html，默认 markdown', enum: ['text', 'markdown', 'html'], default: 'markdown' },
+      },
+      required: ['page_id', 'content'],
+    },
+  },
+  {
+    name: 'pingcode__delete_wiki_page',
+    description: '删除 Wiki 页面',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        page_id: { type: 'string', description: '页面ID' },
+      },
+      required: ['page_id'],
     },
   },
   {
@@ -1277,6 +1317,52 @@ async function handleToolCall(request: CallToolRequest) {
           parent_id: args?.parent_id as string | undefined,
           content: args?.content as string | undefined,
           format_type: (args?.format_type as 'text' | 'markdown' | 'html') || 'markdown',
+        });
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(data, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'pingcode__update_wiki_page': {
+        const data = await updateWikiPage({
+          page_id: String(args?.page_id),
+          name: args?.name as string | undefined,
+          parent_id: args?.parent_id as string | undefined,
+        });
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(data, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'pingcode__update_wiki_page_content': {
+        const data = await updateWikiPageContent({
+          page_id: String(args?.page_id),
+          content: String(args?.content),
+          format_type: (args?.format_type as 'text' | 'markdown' | 'html') || 'markdown',
+        });
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(data, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'pingcode__delete_wiki_page': {
+        const data = await deleteWikiPage({
+          page_id: String(args?.page_id),
         });
         return {
           content: [

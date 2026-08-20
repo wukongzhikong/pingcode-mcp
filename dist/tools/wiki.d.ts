@@ -28,6 +28,22 @@ export declare function listWikiSpaces(params?: ListWikiSpacesParams): Promise<u
 export declare function listWikiPages(params: ListWikiPagesParams): Promise<unknown>;
 export declare function getWikiPage(params: GetWikiPageParams): Promise<unknown>;
 export declare function createWikiPage(params: CreateWikiPageParams): Promise<unknown>;
+export interface UpdateWikiPageParams {
+    page_id: string;
+    name?: string;
+    parent_id?: string;
+}
+export declare function updateWikiPage(params: UpdateWikiPageParams): Promise<unknown>;
+export interface UpdateWikiPageContentParams {
+    page_id: string;
+    content: string;
+    format_type?: 'text' | 'markdown' | 'html';
+}
+export declare function updateWikiPageContent(params: UpdateWikiPageContentParams): Promise<unknown>;
+export interface DeleteWikiPageParams {
+    page_id: string;
+}
+export declare function deleteWikiPage(params: DeleteWikiPageParams): Promise<unknown>;
 export interface AddWikiMembersParams {
     space_id: string;
     user_ids: string[];
