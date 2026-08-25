@@ -15,6 +15,7 @@ import {
   getWorkItem,
   createWorkItem,
   updateWorkItem,
+  listWorkItemStates,
 } from './tools/work-item.js';
 import { listProjects, getProject, createProject, addProjectMembers } from './tools/project.js';
 import { addProductMembers } from './tools/product.js';
@@ -217,6 +218,17 @@ const TOOLS: Tool[] = [
         sprint_ids: { type: 'string', description: '迭代ID，使用逗号分割，最多20个' },
         keywords: { type: 'string', description: '关键词，支持工作项编号和标题' },
         updated_between: { type: 'string', description: '按更新时间筛选，格式为 startTs,endTs（十位时间戳）' },
+        page_index: { type: 'integer', description: '页码，从0开始', default: 0 },
+        page_size: { type: 'integer', description: '每页数量', default: 30 },
+      },
+    },
+  },
+  {
+    name: 'pingcode__list_work_item_states',
+    description: '获取工作项状态列表（如 打开、进行中、已完成），返回每个状态的 id 与名称映射，供 pingcode__update_work_item 的 state_id 参数使用',
+    inputSchema: {
+      type: 'object',
+      properties: {
         page_index: { type: 'integer', description: '页码，从0开始', default: 0 },
         page_size: { type: 'integer', description: '每页数量', default: 30 },
       },
@@ -1011,6 +1023,21 @@ async function handleToolCall(request: CallToolRequest) {
           sprint_ids: args?.sprint_ids as string | undefined,
           keywords: args?.keywords as string | undefined,
           updated_between: args?.updated_between as string | undefined,
+          page_index: args?.page_index as number | undefined,
+          page_size: args?.page_size as number | undefined,
+        });
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(data, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'pingcode__list_work_item_states': {
+        const data = await listWorkItemStates({
           page_index: args?.page_index as number | undefined,
           page_size: args?.page_size as number | undefined,
         });

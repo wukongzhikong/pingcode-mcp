@@ -47,4 +47,9 @@ export declare function listWorkItems(params?: ListWorkItemsParams): Promise<unk
 export declare function getWorkItem(workItemId: string): Promise<unknown>;
 export declare function createWorkItem(params: CreateWorkItemParams): Promise<unknown>;
 export declare function updateWorkItem(params: UpdateWorkItemParams): Promise<unknown>;
+export interface ListWorkItemStatesParams {
+    page_index?: number;
+    page_size?: number;
+}
+export declare function listWorkItemStates(params?: ListWorkItemStatesParams): Promise<unknown>;
 //# sourceMappingURL=work-item.d.ts.map

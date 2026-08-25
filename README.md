@@ -271,7 +271,8 @@ pingcode-mcp status
 | `pingcode__list_work_items` | 获取项目管理工作项列表（story/bug/task/epic/feature），按多维度筛选 | 无 |
 | `pingcode__get_work_item` | 获取单个工作项完整详情 | `work_item_id` |
 | `pingcode__create_work_item` | 创建新工作项（任务/Bug/需求等） | `project_id`, `type_id`, `title` |
-| `pingcode__update_work_item` | 更新工作项属性 | `work_item_id` |
+| `pingcode__update_work_item` | 更新工作项属性（含状态、负责人、迭代等） | `work_item_id` |
+| `pingcode__list_work_item_states` | 获取工作项状态列表（打开/进行中/已完成等），返回状态 id 与名称映射 | 无 |
 
 > 💡 **区分说明**：`list_work_items` 查询 __项目管理__ 中的研发工作项（story/bug/task 等），是研发实现阶段的对象。`list_requirements` 查询 __产品管理__ 中的产品需求（用户需求/原始需求），是产品规划阶段的对象。
 
@@ -425,6 +426,10 @@ AI: [调用 pingcode__update_work_item, assignee_id="我的ID"]
 
 用户: 把我负责的所有工作项更新为已完成
 AI: [批量调用 pingcode__update_work_item]
+
+用户: 把任务 DEMO3-1389 的状态改为"进行中"
+AI: [调用 pingcode__list_work_item_states 拿到"进行中"对应的 state_id]
+AI: [调用 pingcode__update_work_item, work_item_id="DEMO3-1389", state_id="<进行中的状态ID>"]
 ```
 
 ### 工时管理

@@ -77,3 +77,17 @@ export async function updateWorkItem(params: UpdateWorkItemParams) {
   const { work_item_id, ...body } = params;
   return pingCodeClient.patch(`/v1/project/work_items/${work_item_id}`, body);
 }
+
+export interface ListWorkItemStatesParams {
+  page_index?: number;
+  page_size?: number;
+}
+
+export async function listWorkItemStates(params: ListWorkItemStatesParams = {}) {
+  const query = new URLSearchParams();
+  query.append('page_index', String(params.page_index ?? 0));
+  query.append('page_size', String(params.page_size ?? 30));
+
+  const queryString = query.toString() ? `?${query.toString()}` : '';
+  return pingCodeClient.get(`/v1/pjm/workitem_states${queryString}`);
+}
